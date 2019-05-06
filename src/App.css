@@ -1,0 +1,11 @@
+button:focus {
+  outline: 0;
+}
+
+#root {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
