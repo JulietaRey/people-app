@@ -5,16 +5,26 @@ import { connect } from "react-redux";
 import { getUserSelected } from "../HomepageSelector";
 import PreviewHeader from "./PreviewHeader";
 import PreviewData from "./PreviewData";
+import injectSheet from "react-jss";
+
+const styles = {
+  root: {
+    border: "1px solid #c5c5c5",
+    borderTop: "none",
+    borderRadius: "2px",
+    padding: "10px"
+  }
+};
 
 const Preview = props => {
-  const { user } = props;
+  const { user, classes } = props;
   return !user ? null : (
     <Row>
       <Col xs={12}>
         <Row>
           <PreviewHeader user={user} />
         </Row>
-        <Row>
+        <Row className={classes.root}>
           <PreviewData user={user} />
         </Row>
       </Col>
@@ -22,8 +32,11 @@ const Preview = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   user: getUserSelected(state)
 });
 
-export default compose(connect(mapStateToProps))(Preview);
+export default compose(
+  connect(mapStateToProps),
+  injectSheet(styles)
+)(Preview);

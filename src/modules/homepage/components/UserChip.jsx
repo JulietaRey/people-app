@@ -16,12 +16,15 @@ const styles = {
     backgroundColor: "transparent",
     border: "none",
     width: "100%",
+    flexWrap: "unset",
+    textAlign: "left",
     "&.selected": {
-      border: "0.5px solid grey"
+      border: "0.5px solid #c5c5c5"
     }
   },
   label: {
-    paddingLeft: "15px"
+    paddingLeft: "15px",
+    textTransform: "capitalize"
   }
 };
 

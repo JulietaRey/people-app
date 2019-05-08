@@ -16,27 +16,80 @@ const styles = {
   },
   userList: {
     height: "calc(100vh - 161px)",
-    overflowY: "scroll"
+    overflowY: "scroll",
+    alignContent: "flex-start"
+  },
+  input: {
+    border: "none",
+    borderBottom: "2px solid #c5c5c5",
+    margin: "20px 0",
+    width: "100%",
+    fontSize: "18px",
+    "&:focus": {
+      borderBottom: "2px solid #010161",
+      transition: "border 1s ease-in",
+      outline: "none"
+    },
+    "&::placeholder": {
+      color: "#bfbfbf"
+    }
+  },
+  chipContainer: {
+    margin: "5px 0",
+    height: "50px"
+  },
+  inputContainer: {
+    paddingRight: "10px"
   }
 };
 
 class Homepage extends Component {
+  state = {
+    search: ""
+  };
   async componentDidMount() {
     const { loadUsers } = this.props;
     loadUsers();
   }
+
+  handleChange = ({ target: { value } }) => {
+    this.setState({
+      search: value
+    });
+  };
+
+  matchesSearch = ({ name }) => {
+    const fullName = `${name.first} ${name.last}`;
+    return fullName.includes(this.state.search);
+  };
+
   render() {
     const { users, classes } = this.props;
+    const { search } = this.state;
     return (
       <Row className={classes.root}>
         <Col xs={6} xl={8}>
           <Row>
             <h4>Users</h4>
           </Row>
+          <Row className={classes.inputContainer}>
+            <input
+              value={this.state.search}
+              placeholder={"Search for user"}
+              className={classes.input}
+              onChange={this.handleChange}
+            />
+          </Row>
           <Row />
-          <Row className={classes.userList}>
-            {users.map(user => (
-              <Col xs={12} md={6} xl={4} key={user.email}>
+          <Row className={classes.userList} top="xs">
+            {(search ? users.filter(this.matchesSearch) : users).map(user => (
+              <Col
+                xs={12}
+                md={6}
+                xl={4}
+                key={user.email}
+                className={classes.chipContainer}
+              >
                 <UserChip user={user} />
               </Col>
             ))}
