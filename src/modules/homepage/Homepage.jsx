@@ -8,6 +8,7 @@ import { userListSelector } from "./HomepageSelector";
 import injectSheet from "react-jss";
 import { compose } from "recompose";
 import Preview from "./components/Preview";
+import Spinner from "../../assets/spinner.svg";
 
 const styles = {
   root: {
@@ -40,16 +41,23 @@ const styles = {
   },
   inputContainer: {
     paddingRight: "10px"
+  },
+  spinner: {
+    width: "60px"
   }
 };
 
 class Homepage extends Component {
   state = {
-    search: ""
+    search: "",
+    loading: true
   };
   async componentDidMount() {
     const { loadUsers } = this.props;
-    loadUsers();
+    await loadUsers();
+    this.setState({
+      loading: false
+    });
   }
 
   handleChange = ({ target: { value } }) => {
@@ -82,17 +90,21 @@ class Homepage extends Component {
           </Row>
           <Row />
           <Row className={classes.userList} top="xs">
-            {(search ? users.filter(this.matchesSearch) : users).map(user => (
-              <Col
-                xs={12}
-                md={6}
-                xl={4}
-                key={user.email}
-                className={classes.chipContainer}
-              >
-                <UserChip user={user} />
-              </Col>
-            ))}
+            {this.state.loading ? (
+              <img className={classes.spinner} src={Spinner} alt={"loading"} />
+            ) : (
+              (search ? users.filter(this.matchesSearch) : users).map(user => (
+                <Col
+                  xs={12}
+                  md={6}
+                  xl={4}
+                  key={user.email}
+                  className={classes.chipContainer}
+                >
+                  <UserChip user={user} />
+                </Col>
+              ))
+            )}
           </Row>
         </Col>
         <Col xs={6} xl={4}>
